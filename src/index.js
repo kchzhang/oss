@@ -10,9 +10,12 @@ const _static = require('koa-static');
 app.use(_static(
     path.join(__dirname, './font')
 ))
+app.use(_static(
+    path.join(__dirname, './websiteProject')
+))
 // 加载模板引擎
 app.use(views(path.join(__dirname, './font'), {
-    extension: 'html'
+    extension: 'ejs'
 }))
 
 // log request URL:
