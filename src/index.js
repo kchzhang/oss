@@ -3,48 +3,23 @@ const app = new Koa();
 const views = require('koa-views')
 const path = require('path')
 // 注意require('koa-router')返回的是函数:
-const router = require('koa-router')();
+// const router = require('koa-router')();
 const _static = require('koa-static');
-
-// 配置静态web服务的中间件
+const routers = require('./service/router');
+//配置静态web服务的中间件
 app.use(_static(
     path.join(__dirname, './font')
-))
-app.use(_static(
-    path.join(__dirname, './websiteProject')
 ))
 // 加载模板引擎
 app.use(views(path.join(__dirname, './font'), {
     extension: 'ejs'
 }))
 
-// log request URL:
 app.use(async (ctx, next) => {
     console.log(`Process ${ctx.request.method} ${ctx.request.url}...`);
     await next();
 });
 
-// add url-route:
-router.get('/hello/:name', async (ctx, next) => {
-    var name = ctx.params.name;
-    ctx.response.body = `<h1>Hello1, ${name}!</h1>`;
-});
-
-router.get('/', async (ctx, next) => {
-    let title = 'hello koa2'
-    await ctx.render('index', {
-        title,
-    })
-});
-
-// add router middleware:
-app.use(router.routes());
-
-// app.use( async ( ctx ) => {
-//     let title = 'hello koa2'
-//     await ctx.render('index', {
-//       title,
-//     })
-//   })
+app.use(routers);
 
 app.listen(3000);

@@ -58,15 +58,12 @@
                             请选择工程 <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">功能</a></li>
-                            <li><a href="#">另一个功能</a></li>
-                            <li><a href="#">其他</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">分离的链接</a></li>
+                            <% project.forEach(function(item){%>
+                                <li><a href="<%=item.url%>"><%=item.name %></a></li>
+                            <% }) %>
                         </ul>
                     </div>
                 </nav>
-
             </div>
         </div>
     </div>
