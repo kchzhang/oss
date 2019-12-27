@@ -2,6 +2,7 @@ const Koa = require('koa');
 const app = new Koa();
 const views = require('koa-views')
 const path = require('path')
+const bodyParser = require('koa-bodyparser')
 // 注意require('koa-router')返回的是函数:
 // const router = require('koa-router')();
 const _static = require('koa-static');
@@ -20,6 +21,7 @@ app.use(async (ctx, next) => {
     await next();
 });
 
+app.use(bodyParser());
 app.use(routers);
 
 app.listen(3000);
