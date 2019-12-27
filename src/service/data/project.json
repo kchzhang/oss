@@ -2,6 +2,13 @@
     {
         "projectName": "test",
         "name": "测试",
-        "url": "/websiteProject/test/index.html"
+        "url": "/websiteProject/test/index.html",
+        "urlList": [
+            {
+                "pageName": "首页",
+                "url": "/websiteProject/test/index.html"
+            }
+        ],
+        "desc": "这是一个测试项目"
     }
 ]
