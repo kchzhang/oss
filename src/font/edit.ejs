@@ -1,0 +1,237 @@
+<%-include('./view/common/header.ejs')%>
+<style>
+    body {
+        padding: 50px 0 40px 0;
+    }
+
+    .container {
+        width: auto;
+        margin: 0 0px
+    }
+
+    .ui-state-highlight {
+        height: 1.5em;
+        line-height: 1.2em;
+    }
+
+    .swiper-wrapper {
+        display: block;
+    }
+
+    .ko-box {
+        position: relative;
+    }
+
+    .ko-op {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    .swiper-slide {
+        position: relative;
+    }
+
+    .ko-op-sub {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+</style>
+<div>
+    <input name="projectName" value="<%=project.projectName%>" style="display: none;" />
+    <input name="pageName" value="<%=project.pageName%>" style="display: none;" />
+
+    <div class="container">
+        <div class="row">
+            <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href=""> LOGO1 </a>
+                </div>
+                <ul class="nav navbar-nav navbar-right" style="margin-right:0;">
+                    <li class="navbar-btn">
+                        <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true"
+                            onclick="$.saveContent()" aria-expanded="false">
+                            保存
+                        </button>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="navbar-btn">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                轮播 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a onclick="$.addBaner(1)">banner</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="navbar-btn">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                产品 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="navbar-btn">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                页尾 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="work-body" class="work-container">
+                <!-- 这里动态查询编辑内容 -->
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 新增工程模态框（Modal） -->
+<button id="edit-modal" style="display: none;" type="button" class="btn btn-default" data-toggle="modal"
+    data-target="#myModal">新增</button>
+
+<div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        替换图片
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleInputFile">上传图片</label>
+                        <input type="file" id="exampleInputFile">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="$.uploadImg()">
+                        提交
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var projectName = $("input[name=projectName]").val();
+        var pageName = $("input[name=pageName]").val();
+        $.ajax({
+            url: "/editContent",
+            type: "post",
+            data: { projectName: projectName, pageName: pageName },
+            success: function (res) {
+                if (res.status == 200) {
+                    $("#work-body").html(res.data.match(/<body>[\S\s]*?<\/body>/) || "");
+                    $("#sortable").sortable({
+                        placeholder: "ui-state-highlight",
+                        revert: true
+                    });
+                }
+            }
+        })
+
+        $.saveContent = function () {
+            var projectName = $("input[name=projectName]").val();
+            var pageName = $("input[name=pageName]").val();
+            var content = $("#work-body").html();
+            $.ajax({
+                url: "/saveContent",
+                type: "post",
+                data: { projectName: projectName, pageName: pageName, content: content },
+                success: function (res) {
+                    if (res.status == 200) {
+                        window.location.href = "/";
+                    }
+                }
+            })
+        }
+
+
+        var template = `<div class="ko-box">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="./public/images/qq.png"></div>
+                    <div class="swiper-slide">slider2</div>
+                    <div class="swiper-slide">slider3</div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>`;
+
+        $.addBaner = function () {
+            $("#sortable").append(template);
+        }
+        $.editBanner = function (obj) {
+            $("#edit-modal").click();
+        }
+        $.uploadImg = function () {
+            var projectName = $("input[name=projectName]").val();
+            var pageName = $("input[name=pageName]").val();
+            var data = new FormData();
+            var file = $("#exampleInputFile")[0]["files"][0];
+            data.append("file", file);
+            data.append("projectName", projectName);
+            data.append("pageName", pageName);
+            $.ajax({
+                url: "/upload",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                cache: false,
+                dataType: "json",
+                data: data,
+                success: function (res) {
+                    if (res.status == 200) {
+                    }
+                }
+            })
+        }
+
+    })()
+</script>
+
+<%-include('./view/common/footer.ejs')%>

@@ -12,13 +12,82 @@
 </head>
 
 <body>
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">slider1</div>
-            <div class="swiper-slide">slider2</div>
-            <div class="swiper-slide">slider3</div>
+    
+    
+
+    <div id="sortable" class="ui-sortable">
+        <div class="ko-box ui-sortable-handle">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="./public/images/qq.png">
+                        <div class="ko-op-sub">
+                            <button type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" onclick="$.editBanner({_t:this})" aria-expanded="false">
+                                编辑
+                            </button>
+                            <button type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" onclick="$.deleteBanner({_t:this})" aria-expanded="false">
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">slider2</div>
+                    <div class="swiper-slide">slider3</div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <div class="ko-op">
+                <button type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-haspopup="true" onclick="$.deleteBanner({_t:this})" aria-expanded="false">
+                    删除
+                </button>
+            </div>
         </div>
+        <div class="ko-box ui-sortable-handle">
+            <p>cxascascscsacas</p>
+            <div>
+
+                2
+            </div>
+        </div>
+        <div class="ko-box ui-sortable-handle">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="./public/images/qq.png"></div>
+                    <div class="swiper-slide">slider2</div>
+                    <div class="swiper-slide">slider3</div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        <div class="ko-box ui-sortable-handle">
+            3
+        </div>
+        <div class="ko-box ui-sortable-handle">
+            4
+        </div>
+
+
+
     </div>
+
+
+    <script>
+        // var mySwiper = new Swiper('.swiper-container', {
+        //     // autoplay: {
+        //     //     delay: 3000,//1秒切换一次
+        //     //     disableOnInteraction: false,
+        //     // },
+        //     // loop: true,
+        //     // pagination: {
+        //     //     el: '.swiper-pagination',
+        //     //     clickable: true,
+        //     // }
+        // });
+
+
+    </script>
+
+    
+
+    
 </body>
 <script src="./public/js/main.js"></script>
 
