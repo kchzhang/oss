@@ -5,8 +5,10 @@
         "url": "/websiteProject/test/index.html",
         "urlList": [
             {
-                "pageName": "首页",
-                "url": "/websiteProject/test/index.html"
+                "name": "首页",
+                "pageName": "index",
+                "url": "/websiteProject/test/index.html",
+                "desc": ""
             }
         ],
         "desc": "这是一个测试项目"
