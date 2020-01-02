@@ -26,6 +26,7 @@
         position: absolute;
         bottom: 0;
         left: 0;
+        z-index: 1;
     }
 
     .swiper-slide {
@@ -65,7 +66,7 @@
                                 轮播 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a onclick="$.addBaner(1)">banner</a></li>
+                                <li><a onclick="$.addBaner('banner1')">banner</a></li>
                                 <li><a href="#">Another action</a></li>
                                 <li><a href="#">Something else here</a></li>
                                 <li role="separator" class="divider"></li>
@@ -144,7 +145,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    <button id="close-myModal" type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
                     <button type="button" class="btn btn-primary" onclick="$.uploadImg()">
                         提交
@@ -154,7 +155,7 @@
         </div>
     </div>
 </div>
-
+<script src="/public/js/template.js"></script>
 <script>
     (function () {
         var projectName = $("input[name=projectName]").val();
@@ -202,11 +203,22 @@
             </div>
         </div>`;
 
-        $.addBaner = function () {
-            $("#sortable").append(template);
+        $.addBaner = function (type) {
+            debugger
+            $("#sortable").append($.template[type]);
         }
         $.editBanner = function (obj) {
+            $.curEditObj = obj;
             $("#edit-modal").click();
+        }
+        $.deleteBanner = function (obj) {
+            $.curEditObj = obj;
+            $($.curEditObj._t).parents(".swiper-slide").remove();
+        }
+        //删除整块组件
+        $.deleteKo = function (obj) {
+            $.curEditObj = obj;
+            $($.curEditObj._t).parents(".ko-box").remove();
         }
         $.uploadImg = function () {
             var projectName = $("input[name=projectName]").val();
@@ -226,6 +238,10 @@
                 data: data,
                 success: function (res) {
                     if (res.status == 200) {
+                        var url = res.copyPath;
+                        url = url.split("font")[1];
+                        $($.curEditObj._t).parents(".swiper-slide").find("img").attr("src", url);
+                        $("#close-myModal").click();
                     }
                 }
             })

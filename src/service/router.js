@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 const router = new Router();
 const child_process = require('child_process');
-const { readFileJson, readFileHtml, writeFile, fs, path, copyFile, uploadWriteFile } = require('./utils');
+const { readFileJson, readFileHtml, writeFile, copyFile, uploadWriteFile, removeFile } = require('./utils');
 const multiparty = require("multiparty");
 
 router.get('/hello/:name', async (ctx, next) => {
@@ -47,7 +47,8 @@ router.post('/upload', async (ctx, next) => {
     const { projectName, pageName, fieldName, originalFilename, originPath } = file
     const splitChunk = `websiteProject/${projectName[0]}/public`;
     const copyPath = originPath.replace("public", splitChunk);
-    ctx.response.body = await copyFile({ originPath, copyPath });
+    await copyFile({ originPath, copyPath });
+    ctx.response.body = await removeFile({ originPath, copyPath })
 });
 
 /**
@@ -115,7 +116,23 @@ router.post('/delete', async (ctx, next) => {
     ctx.response.body = await res;
 });
 
+/**
+ * 下载项目
+ */
+// router.post('/down', async (ctx, next) => {
+//     const { projectName } = ctx.request.body;
+//     const gulp = () => {
+//         return new Promise((resolve, reject) => {
+//             child_process.exec(`sh ./sh/down.sh`, (code, stdout, stderr) => {
+//                 resolve({ status: 200, message: "成功", data: "11111" })
+//                 //resolve({ status: 200, message: "成功", data: "11111" })
+//                 console.log({ code: -1, msg: `新增失败11111${code}22222${stdout}33333${stderr}` })
+//             })
+//         })
+//     }
 
+//     ctx.response.body = await gulp();
+// });
 /**
  * 新增工程页面
  */

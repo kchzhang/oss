@@ -69,6 +69,18 @@ module.exports = {
                 return resolve({ projectName, pageName, fieldName, originalFilename, originPath });
             });
         })
-    }
+    },
+    removeFile({ originPath, copyPath }) {
+        return new Promise((resolve, reject) => {
+            fs.unlink(originPath, function (error) {
+                if (error) {
+                    resolve({ status: 500, message: "失败" })
+
+                    return console.error(err);
+                }
+                resolve({ status: 200, message: "成功", copyPath })
+            })
+        })
+    },
 
 }

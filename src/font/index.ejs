@@ -132,7 +132,9 @@
                                     <li role="separator" class="divider"></li>
 
                                     <%item.urlList&&item.urlList.forEach(function(subItem){%>
-                                    <li><a href="./edit/<%=item.projectName%>/<%=subItem.pageName%>"><%=subItem.name%></a></li>
+                                    <li><a
+                                            href="./edit/<%=item.projectName%>/<%=subItem.pageName%>"><%=subItem.name%></a>
+                                    </li>
                                     <%})%>
                                 </ul>
                             </div>
@@ -148,7 +150,8 @@
                                     <%})%>
                                 </ul>
                             </div>
-                            <button type="button" class="btn btn-default">下载</button>
+                            <button type="button" class="btn btn-default"
+                                onclick="$.downAction('<%=item.projectName%>')" downAction>下载</button>
                             <%if(item.projectName!='test'){%>
                             <button type="button" class="btn btn-default"
                                 onclick="$.deteleAction('<%=item.projectName%>')">删除</button>
@@ -264,6 +267,19 @@
                 success: function (res) {
                     if (res.status == 200) {
                         window.location.href = window.location.href;
+                    }
+                }
+            })
+        };
+        $.downAction = function (item) {
+            $.ajax({
+                url: "/down",
+                type: "post",
+                timeout: 30000000,
+                data: { projectName: item },
+                success: function (res) {
+                    if (res.status == 200) {
+                        debugger
                     }
                 }
             })

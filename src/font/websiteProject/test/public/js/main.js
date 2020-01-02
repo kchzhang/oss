@@ -1,3 +1,11 @@
 var mySwiper = new Swiper('.swiper-container', {
-    autoplay: true,//可选选项，自动滑动
-})
+    autoplay: {
+        delay: 3000,//1秒切换一次
+        disableOnInteraction: false,
+    },
+    loop: true,
+    pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+    }
+});
