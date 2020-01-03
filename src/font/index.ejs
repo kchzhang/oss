@@ -1,7 +1,6 @@
 <%-include('./view/common/header.ejs')%>
 <style>
     body {
-        margin-left: 200px;
         padding: 50px 0 40px 0;
     }
 
@@ -27,8 +26,46 @@
     }
 </style>
 <div>
-    <div class="container">
+    <div class="container" style="padding-top: 20px;">
         <div class="row">
+
+            <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href=""> LOGO </a>
+                </div>
+                <!-- <ul class="nav navbar-nav navbar-right" style="margin-right:0;">
+                    <li>
+                        <a href="#">ww</a>
+                    </li>
+                    <li>
+                        <a href="#">ss</a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-btn" data-toggle="dropdown">
+                            zz<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">子菜单1</a></li>
+                            <li><a href="#">子菜单2</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">子菜单3</a></li>
+                        </ul>
+                    </li>
+                </ul> -->
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="navbar-btn">
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                            data-target="#myModal">新增</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- <div class="row">
             <nav class="sidebar-nav">
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -41,10 +78,8 @@
                     </ul>
                 </div>
             </nav>
-        </div>
-        <div class="row">
-            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">新增</button>
-        </div>
+        </div> -->
+
         <table class="table table-hover">
             <thead>
                 <th>
@@ -73,15 +108,18 @@
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
-                                    编辑页面
+                                    页面
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a data-toggle="modal" data-target="#myModalPage">编辑</a></li>
+                                    <li><a data-toggle="modal" data-target="#myModalPage"
+                                            onclick="$.addPage({'projectName':'<%=item.projectName%>'})">新增</a></li>
                                     <li role="separator" class="divider"></li>
 
-                                    <%item.urlList&&item.urlList.forEach(function(item){%>
-                                    <li><a href="<%=item.url%>"><%=item.pageName%></a></li>
+                                    <%item.urlList&&item.urlList.forEach(function(subItem){%>
+                                    <li><a
+                                            href="./edit/<%=item.projectName%>/<%=subItem.pageName%>"><%=subItem.name%></a>
+                                    </li>
                                     <%})%>
                                 </ul>
                             </div>
@@ -97,7 +135,8 @@
                                     <%})%>
                                 </ul>
                             </div>
-                            <button type="button" class="btn btn-default">下载</button>
+                            <button type="button" class="btn btn-default"
+                                onclick="$.downAction('<%=item.projectName%>')" downAction>下载</button>
                             <%if(item.projectName!='test'){%>
                             <button type="button" class="btn btn-default"
                                 onclick="$.deteleAction('<%=item.projectName%>')">删除</button>
@@ -128,7 +167,7 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="projectName">工程名称</label>
-                                    <input type="text" class="form-control" name="projectName" id=""
+                                    <input type="text" class="form-control" name="projectName"
                                         placeholder="请输入工程名称,工程唯一标识">
                                 </div>
                                 <div class="form-group">
@@ -164,15 +203,20 @@
                                 &times;
                             </button>
                             <h4 class="modal-title" id="myModalPageLabel">
-                                新增工程
+                                新增页面
                             </h4>
                         </div>
-                        <form id="formPage" action="/" method="post" autocomplete="off">
+                        <form id="formPage" action="/addPage" method="post" autocomplete="off">
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="projectName">工程名称11</label>
-                                    <input type="text" class="form-control" name="projectName"
+                                <div class="form-group" style="display: none;">
+                                    <label for="projectName">工程名称</label>
+                                    <input type="text" class="form-control" name="projectName" id="projectName_page"
                                         placeholder="请输入工程名称,工程唯一标识">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pageName">页面标识</label>
+                                    <input type="text" class="form-control" name="pageName"
+                                        placeholder="请输入页面名称,页面唯一标识">
                                 </div>
                                 <div class="form-group">
                                     <label for="name">名称</label>
@@ -181,29 +225,6 @@
                                 <div class="form-group">
                                     <label for="name">描述</label>
                                     <textarea class="form-control" name="desc" rows="3" placeholder="请输入描述"></textarea>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <div class="form-group">
-                                            <label for="name">页面名称</label>
-                                            <input type="text" class="form-control" name="name" placeholder="请输入页面名称">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-7">
-                                        <div class="form-group">
-                                            <label for="name">页面链接</label>
-                                            <input type="text" class="form-control" name="url" placeholder="请输入页面链接">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-2">
-                                        <div class="form-group">
-                                            <label for="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                            <button type="button" class="btn btn-default"> <span
-                                                    class="glyphicon glyphicon-plus"
-                                                    aria-hidden="true"></span></button>
-
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -234,7 +255,95 @@
                     }
                 }
             })
-        }
+        };
+        $.downAction = function (item) {
+            $.ajax({
+                url: "/down",
+                type: "post",
+                timeout: 30000000,
+                data: { projectName: item },
+                success: function (res) {
+                    if (res.status == 200) {
+                        var download = $("<a id='download' href='/dist/" + res.data.fileName + "' download='" + res.data.fileName + "'></a>");
+                        $("body").append(download);
+                        $("a#download")[0].click();
+                        $("#download").remove();
+                    }
+                }
+            })
+        };
+
+        $.addPage = function (obj) {
+            var projectName = obj.projectName;
+            $("#projectName_page").val(projectName);
+        };
+
+        $('#formPage')
+            .bootstrapValidator({
+                message: '登录校验',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    /*验证：规则*/
+                    pageName: {//验证input项：验证规则
+                        message: '工程名称',
+                        validators: {
+                            notEmpty: {//非空验证：提示消息
+                                message: '不能为空'
+                            },
+                            stringLength: {
+                                min: 2,
+                                max: 20,
+                                message: '长度必须在2到20之间'
+                            },
+                            regexp: {
+                                regexp: /^[A-Za-z0-9_]+$/,
+                                message: '数字、字母、下划线组成'
+                            }
+                        }
+                    },
+                    name: {
+                        message: '名称',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            },
+                            stringLength: {
+                                min: 1,
+                                max: 20,
+                                message: '长度必须在1到20之间'
+                            },
+                            regexp: {
+
+                                regexp: /^[A-Za-z0-9\u4e00-\u9fa5]+$/,
+                                message: '账号/用户名由数字、字母、汉字组成'
+                            }
+                        }
+                    },
+                    desc: {
+                        message: '描述',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            },
+                            stringLength: {
+                                min: 1,
+                                max: 300,
+                                message: '长度必须在1到300之间'
+                            },
+                            regexp: {
+
+                                regexp: /^[A-Za-z0-9\u4e00-\u9fa5]+$/,
+                                message: '由数字、字母、汉字组成'
+                            }
+                        }
+                    }
+
+                }
+            })
 
 
         $('#form')

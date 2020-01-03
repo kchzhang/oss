@@ -9,7 +9,8 @@ const _static = require('koa-static');
 const routers = require('./service/router');
 //配置静态web服务的中间件
 app.use(_static(
-    path.join(__dirname, './font')
+    path.join(__dirname, './font'),
+    path.join(__dirname, './dist')
 ))
 // 加载模板引擎
 app.use(views(path.join(__dirname, './font'), {
