@@ -194,6 +194,10 @@ router.post('/addPage', async (ctx, next) => {
             })
             let str = JSON.stringify(jsonData, null, 4);
             const res = await writeFile({ url: './data/project.json', str })
+            child_process.exec(`cp -rf src/font/view/common/template.html src/font/websiteProject/${projectName}/${pageName}.html`, (code, stdout, stderr) => {
+                //resolve({ status: 200, message: "成功", data: "11111" })
+                console.log({ code: -1, msg: `COPY新增失败11111${code}22222${stdout}33333${stderr}` })
+            })
         }
         ctx.response.redirect('/');
 
