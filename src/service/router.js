@@ -119,20 +119,54 @@ router.post('/delete', async (ctx, next) => {
 /**
  * 下载项目
  */
-// router.post('/down', async (ctx, next) => {
-//     const { projectName } = ctx.request.body;
-//     const gulp = () => {
-//         return new Promise((resolve, reject) => {
-//             child_process.exec(`sh ./sh/down.sh`, (code, stdout, stderr) => {
-//                 resolve({ status: 200, message: "成功", data: "11111" })
-//                 //resolve({ status: 200, message: "成功", data: "11111" })
-//                 console.log({ code: -1, msg: `新增失败11111${code}22222${stdout}33333${stderr}` })
-//             })
-//         })
-//     }
+router.post('/down', async (ctx, next) => {
+    const fileName = `project${new Date().getTime()}.zip`;
+    const { projectName } = ctx.request.body;
+    const DELETEFILE = () => {
+        return new Promise((resolve, reject) => {
+            child_process.exec("rm -r dist src/font/dist", (code, stdout, stderr) => {
+                resolve({ status: 200, message: "编译成功", data: "11111" })
+                //resolve({ status: 200, message: "成功", data: "11111" })
+                console.log({ code: -1, msg: `gulp新增失败11111${code}22222${stdout}33333${stderr}` })
+            })
+        })
+    }
 
-//     ctx.response.body = await gulp();
-// });
+    const GULP = () => {
+        return new Promise((resolve, reject) => {
+            child_process.exec("gulp", (code, stdout, stderr) => {
+                resolve({ status: 200, message: "编译成功", data: "11111" })
+                //resolve({ status: 200, message: "成功", data: "11111" })
+                console.log({ code: -1, msg: `gulp新增失败11111${code}22222${stdout}33333${stderr}` })
+            })
+        })
+    }
+
+    const ZIP = () => {
+        return new Promise((resolve, reject) => {
+            child_process.exec(`zip -r dist/${fileName} dist/${projectName}`, (code, stdout, stderr) => {
+                resolve({ status: 200, message: "编译成功", data: "11111" })
+                //resolve({ status: 200, message: "成功", data: "11111" })
+                console.log({ code: -1, msg: `新增失败11111${code}22222${stdout}33333${stderr}` })
+            })
+        })
+    }
+
+    const COPY = () => {
+        return new Promise((resolve, reject) => {
+            child_process.exec(`cp -rf dist/ src/font/dist/`, (code, stdout, stderr) => {
+                resolve({ status: 200, message: "编译成功", data: { fileName } })
+                //resolve({ status: 200, message: "成功", data: "11111" })
+                console.log({ code: -1, msg: `COPY新增失败11111${code}22222${stdout}33333${stderr}` })
+            })
+        })
+    }
+
+    await DELETEFILE();
+    await GULP();
+    await ZIP();
+    ctx.response.body = await COPY();
+});
 /**
  * 新增工程页面
  */

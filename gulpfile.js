@@ -3,9 +3,8 @@ const imagemin = require('gulp-imagemin'); //图片压缩
 const uglify = require("gulp-uglify"); //js压缩
 const less = require('gulp-less'); //less
 const cleanCSS = require('gulp-clean-css'); //css压缩
-const zip = require('gulp-zip'); //less
 const htmlmin = require('gulp-htmlmin');
-console.log(htmlmin);
+
 // `clean` 函数并未被导出（export），因此被认为是私有任务（private task）。
 // 它仍然可以被用在 `series()` 组合中。
 function clean(cb) {
@@ -60,4 +59,8 @@ function CSS(cb) {
 }
 
 exports.build = build;
+exports.IMAGE = IMAGE;
+exports.CSS = CSS;
+exports.JS = JS;
+exports.HTML = HTML;
 exports.default = series(clean, build, IMAGE, CSS, JS, HTML);

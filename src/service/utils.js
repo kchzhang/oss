@@ -75,8 +75,7 @@ module.exports = {
             fs.unlink(originPath, function (error) {
                 if (error) {
                     resolve({ status: 500, message: "失败" })
-
-                    return console.error(err);
+                    return console.error(error);
                 }
                 resolve({ status: 200, message: "成功", copyPath })
             })
