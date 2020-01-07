@@ -5,8 +5,8 @@
     }
 
     .container {
-        width: auto;
-        margin: 0 0px
+        width: 1024px;
+        margin: auto;
     }
 
     .ui-state-highlight {
@@ -38,12 +38,50 @@
         right: 0;
         top: 0;
     }
+
+    .edit-work {
+        width: 320px;
+        height: 608px;
+        float: left;
+        position: fixed;
+        top: 60px;
+        z-index: 1;
+        border: 1px solid #e7e7e7;
+        background: #fff;
+
+    }
+
+    .edit-work-body {
+        margin: 38px 0 0 0;
+        height: 568px;
+        overflow: auto;
+        margin-right: 0;
+    }
+
+    .edit-work .navbar-nav {
+        margin-right: 0;
+        position: absolute;
+        right: 0;
+        width: 100%;
+        background: #f8f8f8;
+    }
+
+    .edit-work li.navbar-btn {
+        float: right;
+    }
+
+    .edit-work .edit-contain {
+        margin: 10px;
+    }
 </style>
 <div>
     <input name="projectName" value="<%=project.projectName%>" style="display: none;" />
     <input name="pageName" value="<%=project.pageName%>" style="display: none;" />
 
     <div class="container">
+        <div class="row">
+
+        </div>
         <div class="row">
             <div class="navbar navbar-default navbar-fixed-top" role="navigation">
                 <div class="navbar-header">
@@ -67,7 +105,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a onclick="$.addBaner('banner1')">banner</a></li>
-                                <li><a href="#">Another action</a></li>
+                                <li><a onclick="$.addBaner('onlyPic')">onePic</a></li>
                                 <li><a href="#">Something else here</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#">Separated link</a></li>
@@ -109,14 +147,33 @@
             </div>
         </div>
 
-        <div class="row">
+        <div id="containment-wrapper" class="row">
             <div id="work-body" class="work-container">
                 <!-- 这里动态查询编辑内容 -->
 
             </div>
-
+            <div id="edit-work" class="edit-work">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="navbar-btn">
+                        <span class="glyphicon glyphicon-remove" style="margin-right: 8px;"></span>
+                    </li>
+                </ul>
+                <div class="edit-work-body">
+                    <div class="edit-contain">
+                        <div class="form-group">
+                            <label for="keywords">keywords</label>
+                            <input type="text" class="form-control" name="keywords" placeholder="关键字"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">description</label>
+                            <input type="text" class="form-control" name="description" placeholder="用途描述"
+                                autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
 </div>
 
@@ -158,19 +215,30 @@
 <script src="/public/js/template.js"></script>
 <script>
     (function () {
+
+
         var projectName = $("input[name=projectName]").val();
         var pageName = $("input[name=pageName]").val();
+        $("#edit-work").draggable();
+
         $.ajax({
             url: "/editContent",
             type: "post",
-            data: { projectName: projectName, pageName: pageName },
+            data: {
+                projectName: projectName,
+                pageName: pageName
+            },
             success: function (res) {
                 if (res.status == 200) {
+                    var keywords = $(res.data).siblings("meta[name=keywords]").attr("content");
+                    var description = $(res.data).siblings("meta[name=description]").attr("content");
                     $("#work-body").html(res.data.match(/<body>[\S\s]*?<\/body>/) || "");
                     $("#sortable").sortable({
                         placeholder: "ui-state-highlight",
                         revert: true
                     });
+                    $("input[name=keywords]").val(keywords);
+                    $("input[name=description]").val(description);
                 }
             }
         })
@@ -178,11 +246,19 @@
         $.saveContent = function () {
             var projectName = $("input[name=projectName]").val();
             var pageName = $("input[name=pageName]").val();
+            var keywords = $("input[name=keywords]").val();
+            var description = $("input[name=description]").val();
             var content = $("#work-body").html();
             $.ajax({
                 url: "/saveContent",
                 type: "post",
-                data: { projectName: projectName, pageName: pageName, content: content },
+                data: {
+                    projectName: projectName,
+                    pageName: pageName,
+                    keywords: keywords,
+                    description: description,
+                    content: content
+                },
                 success: function (res) {
                     if (res.status == 200) {
                         window.location.href = "/";
@@ -190,21 +266,7 @@
                 }
             })
         }
-
-
-        var template = `<div class="ko-box">
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="./public/images/qq.png"></div>
-                    <div class="swiper-slide">slider2</div>
-                    <div class="swiper-slide">slider3</div>
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>`;
-
         $.addBaner = function (type) {
-            debugger
             $("#sortable").append($.template[type]);
         }
         $.editBanner = function (obj) {
