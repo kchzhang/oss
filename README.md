@@ -14,3 +14,17 @@
 2.UI问题
 
 ```
+
+##  操作
+``` 
+
+1.如果你先前将 gulp 安装到全局环境中了，请执行 npm rm --global gulp 将 gulp 删除再继续以下操作
+
+2.检查 node、npm是否正确安装
+
+3.npm install --global gulp-cli
+
+4.npm install
+
+5.npm run start
+```
