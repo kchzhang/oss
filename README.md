@@ -17,6 +17,7 @@
 
 ##  操作
 ``` 
+用taobao 镜像
 
 1.如果你先前将 gulp 安装到全局环境中了，请执行 npm rm --global gulp 将 gulp 删除再继续以下操作
 
