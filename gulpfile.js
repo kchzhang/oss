@@ -52,7 +52,7 @@ function IMAGE(cb) {
 
 function CSS(cb) {
     return src(["src/font/websiteProject/**/*.less", "src/font/websiteProject/**/*.css"])
-        .pipe(less())
+        //.pipe(less())
         .pipe(cleanCSS())
         .pipe(dest("dist"))
     cb();
