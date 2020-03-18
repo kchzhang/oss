@@ -6,7 +6,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "supervisor ./src/index.js",
+    "start": "node ./src/index.js",
     "build": "babel src --out-dir dist --copy-files",
     "compile": "gulp"
   },
